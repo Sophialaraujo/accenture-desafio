@@ -37,7 +37,6 @@ def create_user(username, password):
         "userName": username,
         "password": password
     }
-
     response = requests.post(f"{BASE_URL}/Account/v1/User", json=data)
     response_data = response.json()
 
@@ -208,6 +207,7 @@ def main():
 
     if not is_authorized:
         print(">> Authorization test: Not authorized.")
+        return
 
     books_list = get_available_books()
 
