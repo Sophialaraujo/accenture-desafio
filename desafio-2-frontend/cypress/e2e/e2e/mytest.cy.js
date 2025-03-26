@@ -1,8 +1,9 @@
 import fakerBr from 'faker-br';
 import 'cypress-file-upload';
 import { PracticeForm } from '../POM/practice_form';
+import { WebTables } from '../POM/web_tables';
 
-function gerarNumeroAleatorioDe10Digitos() {
+function generateRandom10DigitsNumber() {
     const min = 1000000000;
     const max = 9999999999;
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -20,16 +21,23 @@ function accessBrowserWindowsPage() {
     cy.get(':nth-child(3) > .element-list > .menu-list > #item-0').click();
 }
 
+function accessWebTablesPage() {
+    cy.visit("https://demoqa.com/");
+    cy.get('.category-cards > :nth-child(1)').click();
+    cy.get(':nth-child(1) > .element-list > .menu-list > #item-3').click();
+}
+
 describe('Demoqa Tests', () => {
-    const firstName = fakerBr.name.firstName();
-    const lastName = fakerBr.name.lastName();
-    const userEmail = fakerBr.internet.email();
-    const genderOption = Math.floor(Math.random() * 3);
-    const hobbiesOption = Math.floor(Math.random() * 3);
-    const userNumber = gerarNumeroAleatorioDe10Digitos();
-    const address = fakerBr.address.streetAddress();
 
     it('Practice Form Test', () => {
+        const firstName = fakerBr.name.firstName();
+        const lastName = fakerBr.name.lastName();
+        const userEmail = fakerBr.internet.email();
+        const genderOption = Math.floor(Math.random() * 3);
+        const hobbiesOption = Math.floor(Math.random() * 3);
+        const userNumber = generateRandom10DigitsNumber();
+        const address = fakerBr.address.streetAddress();
+
         accessPracticeFormPage();
 
         const practiceForm = new PracticeForm();
@@ -70,5 +78,50 @@ describe('Demoqa Tests', () => {
         cy.get('#windowButton').click();
 
         cy.contains('This is a sample page').should('be.visible');
+    });
+
+    it('Web Tables Test', () => {
+        cy.viewport(1600, 1000);
+
+        const firstName = fakerBr.name.firstName();
+        const lastName = fakerBr.name.lastName();
+        const userEmail = fakerBr.internet.email();
+        const age = 30;
+        const salary = 4500;
+        const department = "Quality Assurance";
+        accessWebTablesPage();
+
+        var addNewRecordButton = cy.get('#addNewRecordButton'); 
+
+        addNewRecordButton.click();
+
+        const webTables = new WebTables();
+
+        webTables.setFirstName(firstName);
+        webTables.setLastName(lastName);
+        webTables.setUserEmail(userEmail);
+        webTables.setAge(age);
+        webTables.setSalary(salary);
+        webTables.setDepartment(department);
+
+        webTables.submitForm();
+
+        cy.wait(1000);
+
+        var editRecordButton = cy.get('#edit-record-4');
+
+        editRecordButton.click();
+
+        webTables.ageField().clear();
+
+        webTables.setAge(35);
+
+        webTables.submitForm();
+
+        cy.wait(1000);
+
+        var deleteRecordButton = cy.get('#delete-record-4');
+
+        deleteRecordButton.click();
     });
 });
