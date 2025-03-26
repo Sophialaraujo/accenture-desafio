@@ -1,7 +1,6 @@
 import 'cypress-file-upload';
 
 export class PracticeForm {
-  // Exemplo de getters para cada elemento
   firstNameField() {
     return cy.get('#firstName');
   }
@@ -46,7 +45,6 @@ export class PracticeForm {
     return cy.get('#submit');
   }
 
-  // Listas de checkboxes
   genderCheckBoxList() {
     return [
       cy.get('#genterWrapper > .col-md-9 > :nth-child(1)'),
@@ -62,8 +60,6 @@ export class PracticeForm {
       cy.get('#hobbiesWrapper > .col-md-9 > :nth-child(3) > .custom-control-label'),
     ];
   }
-
-  // Métodos de ação
 
   setFirstNameField(firstName) {
     this.firstNameField().type(firstName);
@@ -86,7 +82,6 @@ export class PracticeForm {
   }
 
   setGenderCheckbox(genderOption) {
-    // genderOption deve ser 0, 1 ou 2
     this.genderCheckBoxList()[genderOption].click();
   }
 
